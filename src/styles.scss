@@ -1,3 +1,8 @@
+/*
+@use '@angular/material' as mat;
+
+@include mat.core();
+*/
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -20,3 +25,5 @@ $orange-dark: #E65100;
 @include theme(accent, $orange);
 @include theme(primary-bg, $cyan-dark);
 @include theme(accent-bg, $orange-dark);
+
+

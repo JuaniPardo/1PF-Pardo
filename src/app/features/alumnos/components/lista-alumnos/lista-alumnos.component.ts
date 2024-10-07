@@ -53,6 +53,7 @@ import {MatDialog} from "@angular/material/dialog";
   templateUrl: './lista-alumnos.component.html',
   styleUrl: './lista-alumnos.component.css'
 })
+
 export class ListaAlumnosComponent {
   displayedColumns: string[] = ['apellido', 'nombre', 'email', 'actions'];
   dataSource: MatTableDataSource<Alumno>;
@@ -81,9 +82,9 @@ export class ListaAlumnosComponent {
   }
 
   // Función para abrir el diálogo de edición de alumnos.
-  openDialog(alumno: Alumno) {
+  openDialog(alumno: Alumno | null) {
     const dialogRef = this.dialog.open(AbmAlumnosComponent, {
-      data: alumno,
+      data: alumno || null,
       width: '500px'
     });
     dialogRef.afterClosed().subscribe(result => {
