@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Alumno} from "../../../../shared/interfaces/alumno";
 import {AlumnosService} from "../../../../services/alumnos.service";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -54,7 +54,7 @@ import {MatDialog} from "@angular/material/dialog";
   styleUrl: './lista-alumnos.component.css'
 })
 
-export class ListaAlumnosComponent {
+export class ListaAlumnosComponent implements OnInit {
   displayedColumns: string[] = ['apellido', 'nombre', 'email', 'actions'];
   dataSource: MatTableDataSource<Alumno>;
 
@@ -64,6 +64,9 @@ export class ListaAlumnosComponent {
   // Constructor
   constructor(private alumnosService: AlumnosService, private dialog: MatDialog) {
     this.dataSource = new MatTableDataSource<Alumno>([]);
+  }
+
+  ngOnInit(): void {
     this.loadAlumnos();
   }
 

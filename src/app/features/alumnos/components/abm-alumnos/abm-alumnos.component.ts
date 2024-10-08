@@ -36,17 +36,19 @@ export class AbmAlumnosComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AbmAlumnosComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Alumno
+    @Inject(MAT_DIALOG_DATA) public data: Alumno | null
   ) {
     this.alumnoForm = this.fb.group({
-      nombre: [data.nombre, Validators.required],
-      apellido: [data.apellido, Validators.required],
-      email: [data.email, Validators.email]
+      nombre: [data?.nombre, Validators.required],
+      apellido: [data?.apellido, Validators.required],
+      email: [data?.email, [Validators.email, Validators.required]]
     });
   }
 
   save() {
-    if (this.alumnoForm.valid) {
+    if (this.alumnoForm.invalid) {
+      this.alumnoForm.markAllAsTouched();
+    } else {
       this.dialogRef.close(this.alumnoForm.value);
     }
   }
