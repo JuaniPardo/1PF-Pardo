@@ -56,7 +56,7 @@ import {MatDialog} from "@angular/material/dialog";
 
 export class ListaAlumnosComponent implements OnInit {
   displayedColumns: string[] = ['apellido', 'nombre', 'email', 'actions'];
-  dataSource: MatTableDataSource<Alumno>;
+  dataSource: MatTableDataSource<Alumno> | any = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -91,13 +91,36 @@ export class ListaAlumnosComponent implements OnInit {
       width: '500px'
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadAlumnos();
-      }
+      console.log(result);
+      if (!!result) {
+        // Sí es nuevo o editado, actualizar los datos en la lista.
+        const currentData = this.dataSource.data;
+        if (alumno) {
+          // Sí es editado, actualizar el registro en la lista.
+          const index = currentData.findIndex((x: { id: number; }) => x.id === alumno.id);
+          currentData[index] = result;
+        } else {
+          // Sí es nuevo, agregar el registro a la lista.
+          currentData.push(result);
+        }
+        this.dataSource.data = currentData; // Actualizar la lista de datos.
+        }
     });
   }
 
   private loadAlumnos() {
     this.dataSource.data = this.alumnosService.getAlumnos(); // Asigna los datos al dataSource
+  }
+
+  deleteAlumno(row: { id: number; }) {
+    /*const currentData = this.dataSource.data;
+    const index = currentData.findIndex((x: { id: number; }) => x.id === row.id);
+    console.log('Borrando alumno con id: ', currentData[index]);
+    currentData[index].isActive = false;
+    this.dataSource.data = currentData;*/
+    const currentData = this.dataSource.data;
+    const index = currentData.findIndex((x: { id: number; }) => x.id === row.id);
+    currentData.splice(index, 1);
+    this.dataSource.data = currentData;
   }
 }

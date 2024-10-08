@@ -68,6 +68,6 @@ export class AlumnosService {
   }
 
   getAlumnos(): Alumno[] {
-    return this.alumnos;
+    return this.alumnos.filter(alumno => alumno.isActive);
   }
 }

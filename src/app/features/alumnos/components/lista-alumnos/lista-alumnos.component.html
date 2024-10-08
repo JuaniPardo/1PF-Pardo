@@ -40,7 +40,7 @@
         <td mat-cell *matCellDef="let row">
           <div class="actions">
             <button mat-icon-button class="edit-icon" aria-label="Edit button" (click)="openDialog(row)"><mat-icon>edit</mat-icon></button>
-            <button mat-icon-button class="delete-icon" aria-label="Delete button"><mat-icon>delete</mat-icon></button>
+            <button mat-icon-button class="delete-icon" aria-label="Delete button" (click)="deleteAlumno(row)"><mat-icon>delete</mat-icon></button>
           </div>
         </td>
       </ng-container>
