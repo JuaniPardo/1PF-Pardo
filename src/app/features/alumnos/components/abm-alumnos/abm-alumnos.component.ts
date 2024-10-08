@@ -13,6 +13,7 @@ import {MatLabel, MatError} from "@angular/material/form-field";
 import {MatButton} from "@angular/material/button";
 import {Alumno} from "../../../../shared/interfaces/alumno";
 import {FullNamePipe} from "../../../../shared/pipes/full-name.pipe";
+import {TitleDirective} from "../../../../shared/directives/title.directive";
 
 @Component({
   selector: 'app-abm-alumnos',
@@ -28,6 +29,7 @@ import {FullNamePipe} from "../../../../shared/pipes/full-name.pipe";
     MatDialogActions,
     MatButton,
     FullNamePipe,
+    TitleDirective,
   ],
   templateUrl: './abm-alumnos.component.html',
   styleUrl: './abm-alumnos.component.css'
