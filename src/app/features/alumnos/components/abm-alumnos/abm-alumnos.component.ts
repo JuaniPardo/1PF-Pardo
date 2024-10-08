@@ -12,6 +12,7 @@ import {MatInput} from "@angular/material/input";
 import {MatLabel, MatError} from "@angular/material/form-field";
 import {MatButton} from "@angular/material/button";
 import {Alumno} from "../../../../shared/interfaces/alumno";
+import {FullNamePipe} from "../../../../shared/pipes/full-name.pipe";
 
 @Component({
   selector: 'app-abm-alumnos',
@@ -26,6 +27,7 @@ import {Alumno} from "../../../../shared/interfaces/alumno";
     MatInput,
     MatDialogActions,
     MatButton,
+    FullNamePipe,
   ],
   templateUrl: './abm-alumnos.component.html',
   styleUrl: './abm-alumnos.component.css'

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Editar Alumno</h1>
+<h1 mat-dialog-title>{{ data ? (data | fullName) : 'Nuevo Alumno' }}</h1>
 <div class="main" mat-dialog-content>
   <form [formGroup]="alumnoForm">
     <mat-form-field>

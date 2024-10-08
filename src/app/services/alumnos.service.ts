@@ -70,4 +70,32 @@ export class AlumnosService {
   getAlumnos(): Alumno[] {
     return this.alumnos.filter(alumno => alumno.isActive);
   }
+
+  getAlumnoById(id: number): Alumno | null {
+    const index = this.alumnos.findIndex(alumno => alumno.id === id);
+    if (index === -1) {
+      return null;
+    } else {
+      return this.alumnos[index];
+    }
+  }
+
+  updateAlumno(alumno: Alumno): void {
+    const index = this.getAlumnoById(alumno.id)?.id;
+    if (!!index) {
+      this.alumnos[index] = alumno;
+    }
+  }
+
+  deleteAlumno(id: number): void {
+    const index = this.getAlumnoById(id)?.id;
+    if (!!index) {
+      this.alumnos.splice(index, 1);
+    }
+  }
+
+  getActiveAlumnos(): Alumno[] {
+    return this.alumnos.filter(alumno => alumno.isActive);
+  }
+
 }

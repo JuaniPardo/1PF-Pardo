@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import {Alumno} from "../interfaces/alumno";
 
 @Pipe({
   name: 'fullName',
@@ -6,8 +7,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FullNamePipe implements PipeTransform {
 
-  transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
+  transform(value: Alumno) {
+    // Formato del estilo 'APELLIDO, Nombre'.
+    return `${value.apellido.toUpperCase()}, ${value.nombre}`;
   }
 
 }

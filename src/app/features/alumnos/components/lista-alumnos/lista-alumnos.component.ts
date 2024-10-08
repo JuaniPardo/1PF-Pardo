@@ -109,7 +109,7 @@ export class ListaAlumnosComponent implements OnInit {
   }
 
   private loadAlumnos() {
-    this.dataSource.data = this.alumnosService.getAlumnos(); // Asigna los datos al dataSource
+    this.dataSource.data = this.alumnosService.getActiveAlumnos(); // Asigna los datos al dataSource
   }
 
   deleteAlumno(row: { id: number; }) {
