@@ -43,8 +43,8 @@ export class ListaAlumnosComponent implements OnInit, AfterViewInit {
     role: 'admin',
   }
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  /*@ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;*/
 
   // Constructor
   constructor(
@@ -69,8 +69,8 @@ export class ListaAlumnosComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    /*this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;*/
   }
 
   applyFilter(event: Event) {

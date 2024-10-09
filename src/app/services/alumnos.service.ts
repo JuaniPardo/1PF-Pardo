@@ -87,22 +87,22 @@ export class AlumnosService {
 
   deleteAlumno(id: number): Observable<Alumno[]> {
     ALUMNOS_DB = ALUMNOS_DB.filter(alumno => alumno.id !== id);
-    return of(ALUMNOS_DB).pipe(delay(this.rndTime()));
-  }
-
-  private rndTime(): number {
-    return Math.floor(Math.random() * 2000);
+    return of(ALUMNOS_DB).pipe(delay(this.rndTime() * .3));
   }
 
   updateAlumno(id: number, result: any) {
     ALUMNOS_DB = ALUMNOS_DB.map(alumno =>
       alumno.id === id ? {...alumno, ...result} : alumno
     );
-    return of(ALUMNOS_DB).pipe(delay(this.rndTime()));
+    return of(ALUMNOS_DB).pipe(delay(this.rndTime() * .5));
   }
 
   addAlumno(result: Alumno) {
     ALUMNOS_DB = [...ALUMNOS_DB, { ...result, isActive: true, id: ALUMNOS_DB.length + 1 }];
-    return of(ALUMNOS_DB).pipe(delay(this.rndTime()));
+    return of(ALUMNOS_DB).pipe(delay(this.rndTime() * .7));
+  }
+
+  private rndTime(): number {
+    return Math.floor(Math.random() * 2000);
   }
 }
