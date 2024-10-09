@@ -1,28 +1,16 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {Alumno} from "../../../../shared/interfaces/alumno";
 import {AlumnosService} from "../../../../services/alumnos.service";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatSort, MatSortModule} from "@angular/material/sort";
-import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatNoDataRow,
-  MatRow,
-  MatRowDef,
-  MatTable,
-  MatTableDataSource
-} from "@angular/material/table";
+import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatInputModule} from "@angular/material/input";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {AbmAlumnosComponent} from "../abm-alumnos/abm-alumnos.component";
 import {MatDialog} from "@angular/material/dialog";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-lista-alumnos',
@@ -35,39 +23,49 @@ import {MatDialog} from "@angular/material/dialog";
     MatSort,
     MatSortModule,
     MatInputModule,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatHeaderRowDef,
-    MatRowDef,
-    MatNoDataRow,
-    MatRow,
-    MatHeaderRow,
+    MatTableModule,
     MatButton,
     MatIcon,
     MatIconButton,
+    MatProgressSpinner,
   ],
   templateUrl: './lista-alumnos.component.html',
   styleUrl: './lista-alumnos.component.css'
 })
 
-export class ListaAlumnosComponent implements OnInit {
+export class ListaAlumnosComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['apellido', 'nombre', 'email', 'actions'];
-  dataSource: MatTableDataSource<Alumno> | any = [];
+  dataSource = new MatTableDataSource<Alumno>;
+  isLoading = false;
+  user = {
+    firstName: 'Juan',
+    lastName: 'Pardo',
+    role: 'admin',
+  }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   // Constructor
-  constructor(private alumnosService: AlumnosService, private dialog: MatDialog) {
-    this.dataSource = new MatTableDataSource<Alumno>([]);
+  constructor(
+    private alumnosService: AlumnosService,
+    private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.loadAlumnos();
+  }
+
+  loadAlumnos(): void {
+    this.isLoading = true;
+    this.alumnosService.getActiveAlumnos().subscribe({
+      next: (dataAlumnos) => {
+        this.dataSource.data = dataAlumnos;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    })
   }
 
   ngAfterViewInit() {
@@ -84,43 +82,63 @@ export class ListaAlumnosComponent implements OnInit {
     }
   }
 
-  // Función para abrir el diálogo de edición de alumnos.
-  openDialog(alumno: Alumno | null) {
+  // Función para abrir el diálogo de creación/edición de alumnos.
+  openDialog(alumno: Alumno | null): void {
     const dialogRef = this.dialog.open(AbmAlumnosComponent, {
       data: alumno || null,
-      width: '500px'
+      width: '500px',
+      disableClose: false
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if (!!result) {
-        // Sí es nuevo o editado, actualizar los datos en la lista.
-        const currentData = this.dataSource.data;
-        if (alumno) {
-          // Sí es editado, actualizar el registro en la lista.
-          const index = currentData.findIndex((x: { id: number; }) => x.id === alumno.id);
-          currentData[index] = result;
-        } else {
-          // Sí es nuevo, agregar el registro a la lista.
-          currentData.push(result);
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (!!result) {
+          if (alumno) {
+            this.updateAlumno(alumno.id, result);
+          } else {
+            this.addAlumno(result);
+          }
         }
-        this.dataSource.data = currentData; // Actualizar la lista de datos.
-        }
+      }
     });
   }
 
-  private loadAlumnos() {
-    this.dataSource.data = this.alumnosService.getActiveAlumnos(); // Asigna los datos al dataSource
-  }
-
+  // Función que llama al servicio para baja lógica del alumno.
   deleteAlumno(row: { id: number; }) {
-    /*const currentData = this.dataSource.data;
-    const index = currentData.findIndex((x: { id: number; }) => x.id === row.id);
-    console.log('Borrando alumno con id: ', currentData[index]);
-    currentData[index].isActive = false;
-    this.dataSource.data = currentData;*/
-    const currentData = this.dataSource.data;
-    const index = currentData.findIndex((x: { id: number; }) => x.id === row.id);
-    currentData.splice(index, 1);
-    this.dataSource.data = currentData;
+    this.isLoading = true;
+    this.alumnosService.deleteAlumno(row.id).subscribe({
+      next: (dataAlumnos) => {
+        this.dataSource.data = dataAlumnos;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Función que llama al servicio para actualizar el alumno.
+  private updateAlumno(id: number, result: any) {
+    this.isLoading = true;
+    this.alumnosService.updateAlumno(id, result).subscribe({
+      next: (dataAlumnos) => {
+        this.dataSource.data = dataAlumnos;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Función que llama al servicio para crear el alumno.
+  private addAlumno(result: Alumno) {
+    this.isLoading = true;
+    this.alumnosService.addAlumno(result).subscribe({
+      next: (dataAlumnos) => {
+        this.dataSource.data = dataAlumnos;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
+
   }
 }
