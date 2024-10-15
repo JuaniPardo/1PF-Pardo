@@ -34,3 +34,9 @@ td, th {
   align-items: center;
   height: 100vh;
 }
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
